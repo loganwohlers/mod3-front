@@ -1,0 +1,82 @@
+body {
+     /* this was to get rid of some browsers internal margin so this would line up to end of page */
+     margin: 0px;
+     background-color: rgb(34, 34, 41);
+}
+
+.modal-backdrop {
+     background: none;
+}
+
+.modal-content{
+     text-align: center;
+     background-color: rgb(28, 28, 41) !important;
+     color: rgb(150, 150, 150);
+}
+
+.container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.navbar-nav {
+     float:none;
+     margin:0 auto;
+     display: block;
+     text-align: center;
+ }
+ 
+ .navbar-nav > li {
+     display: inline-block;
+     float:none;
+ }
+
+#title{
+	font-family: fantasy;
+     font-size: 4em;
+     color: rgba(125, 165, 125, 0.692);
+     text-align: center;
+     margin-top: 10px;
+}
+
+img {
+	width: 300px;
+     height: 200px;
+     border: 5px solid rgb(83, 83, 83);
+     margin: 10px;;
+     transition: all 500ms;
+}
+
+img:hover {
+     transform: scale(1.1);
+}
+
+.modal-img {
+	width: 400px;
+     height: 265px;
+     border: 5px solid rgb(83, 83, 83);
+     margin: 10px;;
+     transition: all 500ms;
+}
+
+.modal-img:hover {
+     transform: scale(1.1);
+}
+
+.list-group-item{
+     color: antiquewhite;
+     background-color: rgba(112, 112, 112, 0.13);
+     cursor: pointer; 
+}
+
+.clickable{
+     cursor: pointer;
+}
+
+.figCard{
+     text-align: center;
+     color: rgba(170, 170, 170, 0.747);
+     font-size: 80%;
+}
+
