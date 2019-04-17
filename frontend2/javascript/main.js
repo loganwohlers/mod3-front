@@ -19,7 +19,7 @@ title.addEventListener('click', (e)=>{
 
 home()
 
-//append event listeners to all navbar colors
+//append event listeners to all navbar colors (and lands)
 for (let i=0;i<7;i++){
      let color=mainNav.children[i]
      color.addEventListener('click', (e)=>{
@@ -42,46 +42,30 @@ function home(){
      clearAll()
      fetch(cards_url)
      .then(response=>response.json())
-    
      .then(json=>{
           json.map(renderArt)
      })
 }
 
-function clearImageBoard(){
-     while(imageBoard.firstChild){
-          imageBoard.firstChild.remove()
-     }
-}
-
-function clearUL(){
-     while(bigUL.firstChild){
-          bigUL.firstChild.remove()
+function clearParent(parent){
+     while(parent.firstChild){
+          parent.firstChild.remove()
      }
 }
 
 function clearAll(){
-     clearImageBoard()
-     clearUL()
+     clearParent(imageBoard)
+     clearParent(bigUL)
      $('#displayModal').modal('hide');
 }
 
 function renderArt(card){
-     let fig=document.createElement('figure')
-     fig.classList.add('figCard')
-     let img=document.createElement("img");
-     img.src=`${card.art}`
-     img.addEventListener("click", () => {
-         renderModal(card)
-     });
-
-     let caption=document.createElement('figcaption')
-     caption.classList.add('caption') 
-     // 'clickable'
-     caption.textContent=`${card.name} by ${card.artist.name}`
-         
-     fig.append(img, caption)
-     imageBoard.append(fig) 
+     let currCard = new MTGCard(card)
+     let fig=currCard.figRender()
+     fig.querySelector('.forModal').addEventListener('click', ()=>{
+          renderModal(currCard)   
+     })
+     imageBoard.append(fig)
 }
 
 //send color to colors controller and then render response
@@ -123,7 +107,6 @@ function renderArtists(artist){
 
 function filterByArtist(name){
      clearAll();
-     // $('#displayModal').modal('hide');
      let config={
           method: 'post',
           headers: {
@@ -144,8 +127,7 @@ function getSets(){
      clearAll()
      fetch(set_url)
      .then(response=>response.json())
-     .then(json=>json.map(renderSets))
-          
+     .then(json=>json.map(renderSets))        
 }
 
 function renderSets(set){
@@ -160,7 +142,6 @@ function renderSets(set){
 
 function filterBySet(name){
      clearAll();
-     // $('#displayModal').modal('hide');
      let config={
           method: 'post',
           headers: {
@@ -177,60 +158,23 @@ function filterBySet(name){
 }
 
 //get to modal-content erase it- and redo it for specific card 
-function renderModal(card){
+function renderModal(currCard){
      let display=displayModal.querySelector('.modal-content')
-     let colors=card.colors[0].name
-     if(card.colors.length>1){
-          for(let i=1; i<card.colors.length;i++){
-               colors += ` / ${card.colors[i].name} `
-          }
-     }
-     let flavor=""
-     if(card.flavor_text){
-          flavor=card.flavor_text
-     }
      display.innerHTML=""
-     display.innerHTML+=`
-     <div class="modal-header d-block">
-          <h4class="modal-title text-center" id="exampleModalLabel">${card.name} by ${card.artist.name}</h4>
-               <button type="button" class="close btn btn-info" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-               </button>
-     </div>
-     <div class="modal-body">
-          <img class='modal-img' src=${card.art}>
-          <br>
-          <br>
-          <button type="button" class="btn btn-outline-primary like-btn" >Like (${card.likes})</button>
-          <br>
-          <br>
-          <div class="modal-artist clickable"> 
-               <h4>Artist: ${card.artist.name} </h4>
-          </div>
-          <p> <h6>Colors: ${colors} </h6></p>
-          <p>${flavor}</p>
-          <div class="modal-set clickable"> 
-               Set: ${card.card_set.name} 
-          </div>
-     </div>
-          
-     </div>
-     <div class="modal-footer d-block">
-          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-     </div>
-     `
+     display.innerHTML+=currCard.modalRender()
      displayModal.querySelector('.like-btn').addEventListener('click',(e)=>{
-          addLikes(e, card)
+          addLikes(e, currCard)
      })
      displayModal.querySelector('.modal-artist').addEventListener('click',(e)=>{
-          filterByArtist(card.artist.name)
+          filterByArtist(currCard.artistName)
      })
      displayModal.querySelector('.modal-set').addEventListener('click',(e)=>{
-          filterBySet(card.card_set.name)
+          filterBySet(currCard.setName)
      })
      $('#displayModal').modal('show'); 
 }
 
+//using a card class object
 function addLikes(e, card){
      let likes=card.likes+1
      let config={
@@ -241,13 +185,13 @@ function addLikes(e, card){
        },
        body: JSON.stringify({
            "name": card.name,
-           "artist_id": card.artist_id,
+           "artist_id": card.artistID,
            "art": card.art,
-           "flavor_text": card.flavor_text,
-           "type_line": card.type_line,
-           "card_set_id": card.set_id,
-           "artist_name": card.artist_name,
-           "set_name": card.set_name,
+           "flavor_text": card.flavorText,
+           "type_line": card.type,
+           "card_set_id": card.setID,
+           "artist_name": card.artistName,
+           "set_name": card.setName,
            "likes": likes
        })
      }
