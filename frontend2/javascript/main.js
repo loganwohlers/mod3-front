@@ -1,9 +1,13 @@
+const base_url='http://localhost:3000/api/v1/'
+
 const cards_url='http://localhost:3000/api/v1/cards'
+const artist_url='http://localhost:3000/api/v1/artists'
+
+const set_url='http://localhost:3000/api/v1/card_sets'
+
 const color_filter_url='http://localhost:3000/api/v1/colorfilter'
 const artist_filter_url='http://localhost:3000/api/v1/artistfilter'
-const set_filter_url='http://localhost:3000/api/v1/setfilter'
-const artist_url='http://localhost:3000/api/v1/artists'
-const set_url='http://localhost:3000/api/v1/card_sets'
+const set_filter_url='http://localhost:3000/api/v1/card_setfilter'
 
 const imageBoard=document.getElementById('images')
 const bigUL=document.querySelector('.list-group')
@@ -12,30 +16,32 @@ const displayModal=document.getElementById('displayModal')
 const title=document.getElementById("title")
 const mainNav=document.querySelector(".navbar-nav")
 
+const artistHelper=new CardOwner('artist')
+
+home()
+
 //append event listener to title
 title.addEventListener('click', (e)=>{
      home()
 })
 
-home()
-
 //append event listeners to all navbar colors (and lands)
 for (let i=0;i<7;i++){
      let color=mainNav.children[i]
      color.addEventListener('click', (e)=>{
+          //actual id on the list item (color abbrev)
           filterByColor(color.id)
      })
 }
 //artists in nav bar
 const artists=mainNav.children[7]
 artists.addEventListener('click', (e)=>{
-     getArtists()
-
+     getRenderList('artist')    
 })
 //sets in nav bar
 const sets=mainNav.children[8]
 sets.addEventListener('click', (e)=>{
-     getSets()
+     getRenderList('card_set')
 })
 
 function home(){
@@ -74,8 +80,8 @@ function filterByColor(abbrev){
      let config={
           method: 'post',
           headers: {
-            "Content-Type": "application/json",
-             "Accept": "application/json"
+               "Content-Type": "application/json",
+               "Accept": "application/json"
           },
           body: JSON.stringify({
               "abbreviation": abbrev
@@ -86,76 +92,47 @@ function filterByColor(abbrev){
      .then(json=>json.map(renderArt))
 }
 
-function getArtists(){
+
+
+function getRenderList(type){
      clearAll()
-     fetch(artist_url)
+     let query=base_url+type+'s'
+     debugger
+     fetch(query)
      .then(response=>response.json())
-     .then(json=>{
-          json.map(renderArtists)
-     })
+     .then(json=>json.forEach((ele)=>{
+          renderNames(ele,type)  
+     }))
 }
 
-function renderArtists(artist){
-     let li=document.createElement('li')
-     li.classList.add('list-group-item', 'list-group-item-dark','clickable')
-     li.textContent=`${artist.name}`    
-     li.addEventListener('click', (e)=>{
-          filterByArtist(artist.name)
-     })
-     bigUL.append(li)
-}
-
-function filterByArtist(name){
-     clearAll();
-     let config={
-          method: 'post',
-          headers: {
-            "Content-Type": "application/json",
-             "Accept": "application/json"
-          },
-          body: JSON.stringify({
-              "name": name
-          })
-     }
-     fetch(artist_filter_url, config)
-     .then(response=>response.json())
-     .then(json=>json.map(renderArt))
-     
-}
-
-function getSets(){
-     clearAll()
-     fetch(set_url)
-     .then(response=>response.json())
-     .then(json=>json.map(renderSets))        
-}
-
-function renderSets(set){
+function renderNames(n, type){
+     // debugger
      let li=document.createElement('li')
      li.classList.add('list-group-item', 'list-group-item-dark', 'clickable')
-     li.textContent=`${set.name}`    
+     li.textContent=`${n.name}`    
      li.addEventListener('click', (e)=>{
-          filterBySet(set.name)
+          filterBy(n.name, type)
      })
      bigUL.append(li)
 }
 
-function filterBySet(name){
+function filterBy(name, type){
      clearAll();
      let config={
           method: 'post',
           headers: {
-            "Content-Type": "application/json",
-             "Accept": "application/json"
+               "Content-Type": "application/json",
+               "Accept": "application/json"
           },
           body: JSON.stringify({
-              "name": name
+               "name": name
           })
      }
-     fetch(set_filter_url, config)
+     fetch(base_url+type+'filter', config)
      .then(response=>response.json())
      .then(json=>json.map(renderArt))   
 }
+
 
 //get to modal-content erase it- and redo it for specific card 
 function renderModal(currCard){
@@ -166,15 +143,15 @@ function renderModal(currCard){
           addLikes(e, currCard)
      })
      displayModal.querySelector('.modal-artist').addEventListener('click',(e)=>{
-          filterByArtist(currCard.artistName)
+          filterBy(currCard.artistName, 'artist')
      })
      displayModal.querySelector('.modal-set').addEventListener('click',(e)=>{
-          filterBySet(currCard.setName)
+          filterBy(currCard.setName, 'card_set')
      })
      $('#displayModal').modal('show'); 
 }
 
-//using a card class object
+//using a card class object- could be class method?
 function addLikes(e, card){
      let likes=card.likes+1
      let config={
@@ -198,3 +175,67 @@ function addLikes(e, card){
      fetch(cards_url+'/'+card.id, config)
      .then(e.target.innerText=`Likes (${likes})`)
 }
+
+
+// function getArtists(){
+//      clearAll()
+//      fetch(artist_url)
+//      .then(response=>response.json())
+//      .then(json=>{
+//           json.map(renderArtists)
+//      })
+// }
+
+// function renderArtists(artist){
+//      let li=document.createElement('li')
+//      li.classList.add('list-group-item', 'list-group-item-dark','clickable')
+//      li.textContent=`${artist.name}`    
+//      li.addEventListener('click', (e)=>{
+//           filterByArtist(artist.name)
+//      })
+//      bigUL.append(li)
+// }
+
+// function filterByArtist(name){
+//      clearAll();
+//      let config={
+//           method: 'post',
+//           headers: {
+//             "Content-Type": "application/json",
+//              "Accept": "application/json"
+//           },
+//           body: JSON.stringify({
+//               "name": name
+//           })
+//      }
+//      fetch(artist_filter_url, config)
+//      .then(response=>response.json())
+//      .then(json=>json.map(renderArt)) 
+// }
+
+// function getSets(){
+//      clearAll()
+//      fetch(set_url)
+//      .then(response=>response.json())
+//      .then(json=>json.map(renderSets))        
+// }
+
+
+
+// function filterBySet(name){
+//      clearAll();
+//      let config={
+//           method: 'post',
+//           headers: {
+//             "Content-Type": "application/json",
+//              "Accept": "application/json"
+//           },
+//           body: JSON.stringify({
+//               "name": name
+//           })
+//      }
+//      fetch(set_filter_url, config)
+//      .then(response=>response.json())
+//      .then(json=>json.map(renderArt))   
+// }
+

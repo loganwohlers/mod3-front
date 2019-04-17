@@ -14,19 +14,14 @@ class MTGCard {
           this.setName=data.card_set.name;
      }
 
-     //need to figure out how to handle event listener
      figRender(){
           let fig=document.createElement('figure')
           fig.classList.add('figCard')
           let img=document.createElement("img");
           img.classList.add('clickable', 'forModal')
           img.src=`${this.art}`
-          // img.addEventListener("click", () => {
-          // renderModal(card)
-          // });
           let caption=document.createElement('figcaption')
           caption.classList.add('caption') 
-          // 'clickable'
           caption.textContent=`${this.name} by ${this.artistName}`  
           fig.append(img, caption)        
           return fig;  
@@ -52,7 +47,6 @@ class MTGCard {
 
 
      modalRender(){
-          // debugger
           return `
           <div class="modal-header d-block">
           <h4class="modal-title text-center" id="exampleModalLabel">${this.name} by ${this.artistName}</h4>
@@ -82,13 +76,46 @@ class MTGCard {
           <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
      </div>
      `
+     }  
+}
 
-         
-
-
-
-
+class CardOwner{
+     constructor (type){
+          this.type=type
      }
 
-     
+     getAll(url){
+          fetch(url)
+          .then(response=>response.json())
+          .then(json=>{
+               json.map(renderArtists)
+          })
+     }
+
+     filterBy(url){
+          let config={
+               method: 'post',
+               headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+               },
+               body: JSON.stringify({
+                    "type": this.type
+               })
+               }
+          fetch(url+'filter', config)
+          .then(response=>response.json())
+          .then(json=>json.map(renderArt))   
+     }
+
+
+     renderList(){
+          let li=document.createElement('li')
+          li.classList.add('list-group-item', 'list-group-item-dark', 'clickable')
+          li.textContent=`${this.type}`    
+          // li.addEventListener('click', (e)=>{
+          //      filterBySet(set.name)
+          // })
+     }
+
 }
