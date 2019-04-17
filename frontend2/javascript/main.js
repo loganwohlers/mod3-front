@@ -60,6 +60,11 @@ function renderArt(card){
      fig.querySelector('.forModal').addEventListener('click', ()=>{
           renderModal(currCard)   
      })
+     fig.querySelector('.artist-span').addEventListener('click', (e)=>{
+          filterBy(e.target.textContent, 'artist') 
+     })
+
+     
      imageBoard.append(fig)
 }
 

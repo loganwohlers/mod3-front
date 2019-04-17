@@ -22,7 +22,13 @@ class MTGCard {
           img.src=`${this.art}`
           let caption=document.createElement('figcaption')
           caption.classList.add('caption') 
-          caption.textContent=`${this.name} by ${this.artistName}`  
+          caption.textContent=`${this.name} by: `
+          let span=document.createElement('span') 
+          span.classList.add('artist-span', 'clickable')
+          let strong=document.createElement('strong')
+          strong.textContent=`${this.artistName}`
+          span.append(strong)
+          caption.append(span)
           fig.append(img, caption)        
           return fig;  
      }
