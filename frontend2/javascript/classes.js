@@ -19,7 +19,7 @@ class MTGCard {
           fig.classList.add('figCard')
           let img=document.createElement("img");
           img.classList.add('clickable', 'forModal')
-          img.src=`${this.art}`
+          img.src= `${this.art}`
           let caption=document.createElement('figcaption')
           caption.classList.add('caption') 
           caption.textContent=`${this.name} by: `

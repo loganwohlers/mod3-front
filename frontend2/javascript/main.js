@@ -7,7 +7,16 @@ const displayModal=document.getElementById('displayModal')
 const title=document.getElementById("title")
 const mainNav=document.querySelector(".navbar-nav")
 
+//when you scroll to bottom of window
+$(window).scroll(function() {
+     if($(window).scrollTop() == $(document).height() - $(window).height()) {
+         loadMore()
+     }
+ });
+
+
 home()
+
 
 //append event listener to title
 title.addEventListener('click', (e)=>{
@@ -35,6 +44,14 @@ sets.addEventListener('click', (e)=>{
 
 function home(){
      clearAll()
+     fetch(base_url+'cards')
+     .then(response=>response.json())
+     .then(json=>{
+          json.map(renderArt)
+     })
+}
+
+function loadMore(){
      fetch(base_url+'cards')
      .then(response=>response.json())
      .then(json=>{
