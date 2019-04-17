@@ -8,7 +8,7 @@ class Api::V1::ArtistsController < ApplicationController
      def filter
           name=JSON.parse(request.raw_post)['name']
           artist=Artist.find_by(name: name)
-          @artist_cards = artist.cards
+          @artist_cards = artist.cards.order(name: :asc).limit(500)
           render json: @artist_cards
      end
 

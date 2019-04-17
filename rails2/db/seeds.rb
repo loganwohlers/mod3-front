@@ -12,8 +12,7 @@ Card.destroy_all
 Color.destroy_all
 CardColor.destroy_all
 
-
-data_hash = JSON.parse(File.read('./lib/scryfalltest.json'))
+data_hash = JSON.parse(File.read('./lib/scryfall.json'))
 
 Color.create(name: 'White', abbreviation: 'W')
 Color.create(name: 'Blue', abbreviation: 'U')
@@ -50,5 +49,3 @@ data_hash.each do |card|
           end
      end
 end
-
-# pass thru again for non-normals?

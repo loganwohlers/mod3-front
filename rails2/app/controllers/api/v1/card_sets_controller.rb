@@ -8,12 +8,8 @@ class Api::V1::CardSetsController < ApplicationController
      def filter
           name=JSON.parse(request.raw_post)['name']
           set=CardSet.find_by(name: name)
-          @set_cards = set.cards
+          @set_cards = set.cards.order(name: :asc).limit(500)
           render json: @set_cards
      end
-
-     def show
-
-     end
-     
-   end
+  
+end

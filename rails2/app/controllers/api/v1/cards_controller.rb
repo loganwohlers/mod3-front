@@ -1,7 +1,7 @@
 class Api::V1::CardsController < ApplicationController
      before_action :find_card, only: [:update]
      def index
-       @cards = Card.all.order(name: :asc).limit(200)
+       @cards = Card.order("RANDOM()").limit(100)
        render json: @cards
      end
     

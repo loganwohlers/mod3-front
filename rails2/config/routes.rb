@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
       post '/colorfilter', to: 'colors#filter'
       post '/artistfilter', to: 'artists#filter'
-      post '/setfilter', to: 'card_sets#filter'
+      post '/card_setfilter', to: 'card_sets#filter'
     end
   end
 end
