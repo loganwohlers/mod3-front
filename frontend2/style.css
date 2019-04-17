@@ -25,11 +25,13 @@ body {
      margin:0 auto;
      display: block;
      text-align: center;
+    
  }
  
  .navbar-nav > li {
      display: inline-block;
      float:none;
+     color:red;
  }
 
 #title{

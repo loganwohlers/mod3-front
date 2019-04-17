@@ -76,7 +76,8 @@ function renderArt(card){
      });
 
      let caption=document.createElement('figcaption')
-     caption.classList.add('caption')
+     caption.classList.add('caption') 
+     // 'clickable'
      caption.textContent=`${card.name} by ${card.artist.name}`
          
      fig.append(img, caption)
