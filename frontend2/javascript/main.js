@@ -7,16 +7,29 @@ const displayModal=document.getElementById('displayModal')
 const title=document.getElementById("title")
 const mainNav=document.querySelector(".navbar-nav")
 
+let mainPage=true;
+let lastQuery=""
+
 //when you scroll to bottom of window
 $(window).scroll(function() {
-     if($(window).scrollTop() == $(document).height() - $(window).height()) {
-         loadMore()
+     if(($(window).scrollTop() == $(document).height() - $(window).height()) && mainPage){
+         loadMore(lastQuery)
      }
  });
 
-
 home()
 
+function loadMore(lq){
+     if (lq.length!==1)
+          fetch(lq)
+          .then(response=>response.json())
+          .then(json=>{
+               json.map(renderArt)
+          })
+     else{
+          filterByColor(lastQuery)
+     }
+}
 
 //append event listener to title
 title.addEventListener('click', (e)=>{
@@ -27,6 +40,7 @@ title.addEventListener('click', (e)=>{
 for (let i=0;i<7;i++){
      let color=mainNav.children[i]
      color.addEventListener('click', (e)=>{
+          clearAll();
           //actual id on the list item (color abbrev)
           filterByColor(color.id)
      })
@@ -36,12 +50,14 @@ const artists=mainNav.children[7]
 artists.addEventListener('click', (e)=>{
      getRenderList('artist')    
 })
+
 //sets in nav bar
 const sets=mainNav.children[8]
 sets.addEventListener('click', (e)=>{
      getRenderList('card_set')
 })
 
+//reset to "home-page" and render 100 random cards
 function home(){
      clearAll()
      fetch(base_url+'cards')
@@ -49,15 +65,10 @@ function home(){
      .then(json=>{
           json.map(renderArt)
      })
+     lastQuery=(base_url+'cards')
+     mainPage=true
 }
 
-function loadMore(){
-     fetch(base_url+'cards')
-     .then(response=>response.json())
-     .then(json=>{
-          json.map(renderArt)
-     })
-}
 
 function clearParent(parent){
      while(parent.firstChild){
@@ -80,14 +91,11 @@ function renderArt(card){
      fig.querySelector('.artist-span').addEventListener('click', (e)=>{
           filterBy(e.target.textContent, 'artist') 
      })
-
-     
      imageBoard.append(fig)
 }
 
 //send color to colors controller and then render response
 function filterByColor(abbrev){
-     clearAll();
      let config={
           method: 'post',
           headers: {
@@ -98,6 +106,8 @@ function filterByColor(abbrev){
               "abbreviation": abbrev
           })
      }
+     mainPage=true;
+     lastQuery=abbrev
      fetch(base_url+'colorfilter', config)
      .then(response=>response.json())
      .then(json=>json.map(renderArt))
@@ -111,6 +121,7 @@ function getRenderList(type){
      .then(json=>json.forEach((ele)=>{
           renderNames(ele,type)  
      }))
+     mainPage=false;
 }
 
 function renderNames(n, type){
@@ -135,6 +146,8 @@ function filterBy(name, type){
                "name": name
           })
      }
+     mainPage=false
+     lastQuery=base_url+type+'filter'
      fetch(base_url+type+'filter', config)
      .then(response=>response.json())
      .then(json=>json.map(renderArt))   
