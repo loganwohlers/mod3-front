@@ -48,7 +48,7 @@ body {
 }
 
 #R a{
-     color: red;
+     color: rgba(241, 62, 62, 0.884);
 }
 
 #G a{
@@ -111,6 +111,7 @@ img:hover {
 
 .list-group-item{
      color: antiquewhite;
+     font-size: 1.25em;
      background-color: rgba(112, 112, 112, 0.13);
      cursor: pointer; 
 }
