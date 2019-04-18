@@ -1,6 +1,5 @@
 class MTGCard {
      constructor (data){
-          // (name, artistName, art, likes, colors, flavorText, setName)
           this.id=data.id
           this.name=data.name;
           this.artistID=data.artist.id;

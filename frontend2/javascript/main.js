@@ -19,6 +19,7 @@ $(window).scroll(function() {
 
 home()
 
+//checks if last query was a color OR just homepage and renders 100 more images upon end of page scroll
 function loadMore(lq){
      if (lq.length!==1)
           fetch(lq)
@@ -69,19 +70,21 @@ function home(){
      mainPage=true
 }
 
-
+//clears any parent of it's children
 function clearParent(parent){
      while(parent.firstChild){
           parent.firstChild.remove()
      }
 }
 
+//clears board/list and also hides modal
 function clearAll(){
      clearParent(imageBoard)
      clearParent(bigUL)
      $('#displayModal').modal('hide');
 }
 
+//renders a card for display on 'image board'
 function renderArt(card){
      let currCard = new MTGCard(card)
      let fig=currCard.figRender()
@@ -94,7 +97,7 @@ function renderArt(card){
      imageBoard.append(fig)
 }
 
-//send color to colors controller and then render response
+//send color abbrev to colors controller and then render response
 function filterByColor(abbrev){
      let config={
           method: 'post',
@@ -113,6 +116,7 @@ function filterByColor(abbrev){
      .then(json=>json.map(renderArt))
 }
 
+//helper and sets main page to false(as artist/set don't need infinite scroll
 function getRenderList(type){
      clearAll()
      let query=base_url+type+'s'
@@ -124,6 +128,7 @@ function getRenderList(type){
      mainPage=false;
 }
 
+//renders list of either class/set
 function renderNames(n, type){
      let li=document.createElement('li')
      li.classList.add('list-group-item', 'list-group-item-dark', 'clickable')
@@ -134,6 +139,7 @@ function renderNames(n, type){
      bigUL.append(li)
 }
 
+//queries db for actual cards that belong to color/set
 function filterBy(name, type){
      clearAll();
      let config={
@@ -170,7 +176,7 @@ function renderModal(currCard){
      $('#displayModal').modal('show'); 
 }
 
-//using a card class object- could be class method?
+//using a card class object
 function addLikes(e, card){
      let likes=card.likes+1
      let config={

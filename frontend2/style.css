@@ -1,8 +1,15 @@
+@font-face {
+     font-family: MTGFONT;
+     src: url('MAGIC.TTF');
+}
+
 body {
      /* this was to get rid of some browsers internal margin so this would line up to end of page */
      margin: 0px;
-     background-color: rgb(34, 34, 41);
+     background-color: rgb(34, 34, 41);   
+     font-family: MTGFONT
 }
+
 
 .modal-backdrop {
      background: none;
@@ -24,20 +31,56 @@ body {
      float:none;
      margin:0 auto;
      display: block;
-     text-align: center;
-    
- }
+     text-align: center;   
+}
  
  .navbar-nav > li {
      display: inline-block;
      float:none;
-     color:red;
  }
 
-#title{
-	font-family: fantasy;
-     font-size: 4em;
-     color: rgba(125, 165, 125, 0.692);
+.nav-link{
+     font-size: 1.5em;
+}
+
+#U a{
+     color: rgba(50, 94, 241, 0.925);
+}
+
+#R a{
+     color: red;
+}
+
+#G a{
+     color: green;
+}
+
+#B a{
+     color:black;
+}
+#N a{
+     color:gray;
+}
+
+#L a{
+     color: rgb(118, 122, 92);
+}
+
+#Artists a{
+     color:rgb(136, 119, 24);
+}
+
+#Sets a{
+     color:rgb(136, 119, 24);
+}
+
+figcaption{
+     font-size: 1.25em;
+}
+
+#title h2{
+     font-size: 2.5em;
+     color: rgba(201, 174, 106, 0.822);
      text-align: center;
      margin-top: 10px;
 }
