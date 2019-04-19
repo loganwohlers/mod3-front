@@ -1,4 +1,4 @@
-const base_url='http://localhost:3000/api/v1/'
+const base_url='https://stormy-bastion-21788.herokuapp.com/api/v1/'
 
 const imageBoard=document.getElementById('images')
 const bigUL=document.querySelector('.list-group')
